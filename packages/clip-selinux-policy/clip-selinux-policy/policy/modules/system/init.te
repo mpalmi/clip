@@ -209,6 +209,9 @@ ifdef(`init_systemd',`
 
 	selinux_compute_create_context(init_t)
 	selinux_compute_access_vector(init_t)
+	seutil_read_file_contexts(init_t)
+
+	systemd_read_unitfile_files(init_t)
 
 	logging_send_audit_msgs(init_t)
 
@@ -488,6 +491,9 @@ modutils_read_module_config(initrc_t)
 modutils_domtrans_insmod(initrc_t)
 
 seutil_read_config(initrc_t)
+seutil_domtrans_setfiles(initrc_t)
+logging_domtrans_auditd(initrc_t)
+logging_domtrans_auditctl(initrc_t)
 
 userdom_read_user_home_content_files(initrc_t)
 # Allow access to the sysadm TTYs. Note that this will give access to the
