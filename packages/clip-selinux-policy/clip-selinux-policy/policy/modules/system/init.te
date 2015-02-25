@@ -220,9 +220,9 @@ ifdef(`init_systemd',`
 	dev_relabel_all_dev_nodes(init_t)
 
 	logging_send_audit_msgs(init_t)
-    
-    # shared hwclock
-    allow init_t adjtime_t:file { read getattr open }
+
+	# shared hwclock
+	allow init_t adjtime_t:file { read getattr open };
 
 	optional_policy(`
 		modutils_domtrans_insmod(init_t)
