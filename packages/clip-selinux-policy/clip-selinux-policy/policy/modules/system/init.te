@@ -44,6 +44,7 @@ role system_r types init_t;
 #
 type init_var_run_t;
 files_pid_file(init_var_run_t)
+files_read_all_pids(init_t)
 
 #
 # init_var_lib_t is the type for /var/lib/systemd.
@@ -219,6 +220,9 @@ ifdef(`init_systemd',`
 	dev_relabel_all_dev_nodes(init_t)
 
 	logging_send_audit_msgs(init_t)
+    
+    # shared hwclock
+    allow init_t adjtime_t:file { read getattr open }
 
 	optional_policy(`
 		modutils_domtrans_insmod(init_t)
@@ -285,6 +289,11 @@ optional_policy(`
 	unconfined_domain(init_t)
 ')
 
+files_search_pids(init_t)
+files_relabel_all_pids(init_t)
+relabel_sock_files_pattern(init_t, pidfile, pidfile)
+systemd_dbus_chat_logind(init_t)
+
 ########################################
 #
 # Init script local policy
@@ -341,6 +350,9 @@ manage_files_pattern(initrc_t, initrc_var_log_t, initrc_var_log_t)
 logging_log_filetrans(initrc_t, initrc_var_log_t, dir)
 
 init_write_initctl(initrc_t)
+
+# Connect to private bus (/run/systemd/private)
+init_connect_private_bus(initrc_t)
 
 kernel_read_system_state(initrc_t)
 kernel_read_software_raid_state(initrc_t)
@@ -994,3 +1006,5 @@ optional_policy(`
 optional_policy(`
 	zebra_read_config(initrc_t)
 ')
+
+

@@ -1997,3 +1997,23 @@ interface(`init_udp_recvfrom_all_daemons',`
 	')
 	corenet_udp_recvfrom_labeled($1, daemon)
 ')
+
+########################################
+## <summary>
+## Allow specified domain to create a private bus connection to init.
+## </summary>
+## <param name="domain">
+## <summary>
+## Domain allowed access.
+## </summary>
+## </param>
+#
+
+interface(`init_connect_private_bus',`
+   gen_require(`
+       type init_t;
+   ')
+   write_sock_files_pattern($1, init_var_run_t, init_var_run_t)
+   init_stream_connect($1)
+')
+
