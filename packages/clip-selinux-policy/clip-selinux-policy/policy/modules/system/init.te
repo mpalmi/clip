@@ -63,7 +63,6 @@ mls_trusted_object(initctl_t)
 
 type initrc_t, init_script_domain_type, init_run_all_scripts_domain;
 type initrc_exec_t, init_script_file_type;
-type network_initrc_exec_t, init_script_file_type;
 domain_type(initrc_t)
 domain_entry_file(initrc_t, initrc_exec_t)
 role system_r types initrc_t;
@@ -71,6 +70,9 @@ role system_r types initrc_t;
 # of the below init_upstart tunable
 # but this has a typeattribute in it
 corecmd_shell_entry_type(initrc_t)
+
+type network_initrc_t, init_script_domain_type;
+type network_initrc_exec_t, init_script_file_type;
 
 type initrc_devpts_t;
 term_pty(initrc_devpts_t)
@@ -1026,11 +1028,4 @@ optional_policy(`
 optional_policy(`
 	zebra_read_config(initrc_t)
 ')
-
-########################################
-#
-# Network Init script local policy
-#
-type network_initrc_t, init_script_domain_type;
-type network_initrc_exec_t, init_script_file_type;
 

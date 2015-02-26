@@ -225,6 +225,7 @@ init_daemon_pid_file(systemd_logind_var_run_t, dir, "systemd_logind")
 #
 # Systemd Sessions
 #
+type systemd_sessions_t;
 type systemd_sessions_exec_t;
 init_daemon_domain(systemd_sessions_t, systemd_sessions_exec_t)
 
