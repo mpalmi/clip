@@ -374,6 +374,7 @@ allow systemd_tmpfiles_t self:capability  { fowner chown fsetid dac_override };
 allow systemd_tmpfiles_t self:process setfscreate;
 
 dev_relabel_all_sysfs(systemd_tmpfiles_t)
+dev_read_urand(systemd_tmpfiles_t)
 
 files_read_etc_files(systemd_tmpfiles_t)
 files_relabel_all_lock_dirs(systemd_tmpfiles_t)
@@ -439,3 +440,11 @@ systemd_unit_file(iptables_unit_file_t)
 
 type sshd_unit_file_t;
 systemd_unit_file(sshd_unit_file_t)
+
+#########################################
+#
+# Systemd Sysctl local policy
+#
+files_read_etc_files(systemd_sysctl_t)
+kernel_rw_net_sysctls(systemd_sysctl_t)
+kernel_rw_kernel_sysctl(systemd_sysctl_t)

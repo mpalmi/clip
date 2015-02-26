@@ -191,14 +191,16 @@ ifdef(`init_systemd',`
 	# handle instances where an old labeled init script is encountered.
 	typeattribute init_t init_run_all_scripts_domain;
 
-	allow init_t self:process { getcap getsched setpgid setfscreate setsockcreate setcap setrlimit };
+	allow init_t self:process { getcap getsched setsched setpgid setfscreate setsockcreate setcap setrlimit };
 	allow init_t self:capability2 block_suspend;
 	allow init_t self:netlink_audit_socket nlmsg_readpriv;
 	allow init_t self:netlink_kobject_uevent_socket read;
+	allow init_t self:netlink_route_socket create_netlink_socket_perms;
 	allow init_t self:netlink_selinux_socket read;
 
-	allow init_t init_var_run_t:dir manage_dir_perms;
+	manage_dirs_pattern(init_t, init_var_run_t, init_var_run_t)
 
+	kernel_read_network_state(init_t)
 	kernel_read_kernel_sysctls(init_t)
 	kernel_read_vm_sysctls(init_t)
 
@@ -208,15 +210,14 @@ ifdef(`init_systemd',`
 	# for privatetmp functions
 	files_manage_generic_tmp_dirs(init_t)
 	files_mounton_tmp(init_t)
+	fs_relabel_tmpfs_dirs(init_t)
+	fs_relabel_tmpfs_files(init_t)
 
 	fs_manage_cgroup_dirs(init_t)
 	relabel_dirs_pattern(init_t, cgroup_t, cgroup_t)
 	fs_rw_cgroup_files(init_t)
 
 	# mount-setup
-	#fs_mount_all_fs(init_t)
-	#fs_unmount_all_fs(init_t)
-	#fs_remount_all_fs(init_t)
     fs_unmount_autofs(init_t)
 	allow init_t pstore_t:dir getattr;
 
@@ -225,16 +226,17 @@ ifdef(`init_systemd',`
 	seutil_read_file_contexts(init_t)
 
     files_search_pids(init_t)
-	systemd_read_unit_files(init_t)
-	
     files_relabel_all_pids(init_t)
     dev_relabel_all_dev_nodes(init_t)
     dev_relabel_all_sysfs(init_t)
-    relabel_dirs_pattern(init_t, tmpfs_t, tmpfs_t)
-    relabel_files_pattern(init_t, tmpfs_t, tmpfs_t)
+	dev_read_urand(init_t)
+	dev_write_kmsg(init_t)
     relabelfrom_sock_files_pattern(init_t, tmpfs_t, tmpfs_t)
     relabel_sock_files_pattern(init_t, pidfile, pidfile)
-
+	
+	systemd_manage_unit_dirs(init_t)
+	systemd_manage_all_unit_files(init_t)
+	
 
 	systemd_logind_dbus_chat(init_t)
 
@@ -1025,4 +1027,10 @@ optional_policy(`
 	zebra_read_config(initrc_t)
 ')
 
+########################################
+#
+# Network Init script local policy
+#
+type network_initrc_t, init_script_domain_type;
+type network_initrc_exec_t, init_script_file_type;
 

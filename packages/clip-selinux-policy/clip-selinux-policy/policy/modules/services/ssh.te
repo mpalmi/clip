@@ -367,3 +367,16 @@ optional_policy(`
 	udev_read_db(ssh_keygen_t)
 ')
 
+##############################
+#
+# sshd_keygen_t local policy
+#
+
+allow sshd_keygen_t self:capability { chown fsetid };
+
+corecmd_exec_bin(sshd_keygen_t)
+files_read_etc_files(sshd_keygen_t)
+miscfiles_read_localization(sshd_keygen_t)
+kernel_read_system_state(sshd_keygen_t)
+
+ssh_domtrans_keygen(sshd_keygen_t)

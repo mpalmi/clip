@@ -71,8 +71,6 @@ filetrans_pattern(dhcpc_t, dhcp_state_t, dhcpc_state_t, file)
 manage_files_pattern(dhcpc_t, dhcpc_var_run_t, dhcpc_var_run_t)
 create_dirs_pattern(dhcpc_t, dhcpc_var_run_t, dhcpc_var_run_t)
 files_pid_filetrans(dhcpc_t, dhcpc_var_run_t, { file dir })
-systemd_get_service_status(dhcpc_t)
-systemd_getattr_unit_dirs(dhcpc_t)
 
 # Allow read/write to /etc/resolv.conf and /etc/ntp.conf. Note that any files
 # in /etc created by dhcpcd will be labelled net_conf_t.
@@ -85,6 +83,9 @@ manage_files_pattern(dhcpc_t, dhcpc_tmp_t, dhcpc_tmp_t)
 files_tmp_filetrans(dhcpc_t, dhcpc_tmp_t, { file dir })
 
 can_exec(dhcpc_t, dhcpc_exec_t)
+
+#seutil_exec_setfiles(dhcpc_t)
+#seutil_read_file_contexts(dhcpc_t)
 
 kernel_read_system_state(dhcpc_t)
 kernel_read_network_state(dhcpc_t)
@@ -131,7 +132,10 @@ files_search_var_lib(dhcpc_t)
 files_dontaudit_search_locks(dhcpc_t)
 files_getattr_generic_locks(dhcpc_t)
 
+miscfiles_read_generic_certs(dhcpc_t)
+
 fs_getattr_all_fs(dhcpc_t)
+fs_getattr_tmpfs_dirs(dhcpc_t)
 fs_search_auto_mountpoints(dhcpc_t)
 
 term_dontaudit_use_all_ttys(dhcpc_t)
@@ -232,6 +236,11 @@ optional_policy(`
 optional_policy(`
 	seutil_sigchld_newrole(dhcpc_t)
 	seutil_dontaudit_search_config(dhcpc_t)
+')
+
+optional_policy(`
+	systemd_get_service_status(dhcpc_t)
+	systemd_search_unit_dirs(dhcpc_t)
 ')
 
 optional_policy(`

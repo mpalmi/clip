@@ -198,6 +198,8 @@ interface(`init_daemon_domain',`
 
 	ifdef(`init_systemd',`
 		init_domain($1, $2)
+		# this may be because of late labelling
+		kernel_dgram_send($1)
 	')
 
 	domain_type($1)
@@ -632,6 +634,25 @@ interface(`init_sigchld',`
 	')
 
 	allow $1 init_t:process sigchld;
+')
+
+######################################
+## <summary>
+##	Allow domain dyntransition to init_t domain.
+## </summary>
+## <param name="domain">
+## 	<summary>
+## 	Domain allowed to transition.
+## 	</summary>
+## </param>
+#
+interface(`init_dyntrans',`
+	gen_require(`
+		type init_t;
+	')
+
+	dyntrans_pattern($1, init_t)
+	domain_dyntrans_type($1)
 ')
 
 ########################################
