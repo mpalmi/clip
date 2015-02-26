@@ -213,12 +213,30 @@ ifdef(`init_systemd',`
 	relabel_dirs_pattern(init_t, cgroup_t, cgroup_t)
 	fs_rw_cgroup_files(init_t)
 
+	# mount-setup
+	#fs_mount_all_fs(init_t)
+	#fs_unmount_all_fs(init_t)
+	#fs_remount_all_fs(init_t)
+    fs_unmount_autofs(init_t)
+	allow init_t pstore_t:dir getattr;
+
 	selinux_compute_create_context(init_t)
 	selinux_compute_access_vector(init_t)
 	seutil_read_file_contexts(init_t)
 
-	systemd_read_unitfile_files(init_t)
-	dev_relabel_all_dev_nodes(init_t)
+    files_search_pids(init_t)
+	systemd_read_unit_files(init_t)
+	
+    files_relabel_all_pids(init_t)
+    dev_relabel_all_dev_nodes(init_t)
+    dev_relabel_all_sysfs(init_t)
+    relabel_dirs_pattern(init_t, tmpfs_t, tmpfs_t)
+    relabel_files_pattern(init_t, tmpfs_t, tmpfs_t)
+    relabelfrom_sock_files_pattern(init_t, tmpfs_t, tmpfs_t)
+    relabel_sock_files_pattern(init_t, pidfile, pidfile)
+
+
+	systemd_logind_dbus_chat(init_t)
 
 	logging_send_audit_msgs(init_t)
 
@@ -293,11 +311,6 @@ optional_policy(`
 optional_policy(`
 	unconfined_domain(init_t)
 ')
-
-files_search_pids(init_t)
-files_relabel_all_pids(init_t)
-relabel_sock_files_pattern(init_t, pidfile, pidfile)
-systemd_dbus_chat_logind(init_t)
 
 ########################################
 #

@@ -78,6 +78,10 @@ files_type(syslogd_var_lib_t)
 type syslogd_var_run_t;
 files_pid_file(syslogd_var_run_t)
 
+ifdef(`init_systemd',`
+    init_daemon_pid_file(syslogd_var_run_t, dir, "syslogd")
+')
+
 type var_log_t;
 logging_log_file(var_log_t)
 files_mountpoint(var_log_t)

@@ -43,7 +43,10 @@ corecmd_executable_file(sshd_exec_t)
 
 ssh_server_template(sshd)
 init_daemon_domain(sshd_t, sshd_exec_t)
-systemd_dbus_chat_logind(sshd_t)
+
+ifdef(`init_systemd',`
+	systemd_logind_dbus_chat(sshd_t)
+')
 
 type sshd_key_t;
 files_type(sshd_key_t)
