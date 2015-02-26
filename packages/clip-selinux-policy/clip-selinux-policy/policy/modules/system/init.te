@@ -63,6 +63,7 @@ mls_trusted_object(initctl_t)
 
 type initrc_t, init_script_domain_type, init_run_all_scripts_domain;
 type initrc_exec_t, init_script_file_type;
+type network_initrc_exec_t, init_script_file_type;
 domain_type(initrc_t)
 domain_entry_file(initrc_t, initrc_exec_t)
 role system_r types initrc_t;
@@ -227,6 +228,10 @@ ifdef(`init_systemd',`
 	optional_policy(`
 		modutils_domtrans_insmod(init_t)
 	')
+
+	manage_sock_files_pattern(init_t, syslogd_var_run_t, syslogd_var_run_t)
+    systemd_manage_unit_dirs(init_t)
+    systemd_manage_all_unit_files(init_t)
 
 	optional_policy(`
 		dbus_system_bus_client(init_t)

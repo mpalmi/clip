@@ -36,6 +36,7 @@ init_system_domain(systemd_locale_t, systemd_locale_exec_t)
 type systemd_logind_t;
 type systemd_logind_exec_t;
 init_daemon_domain(systemd_logind_t, systemd_logind_exec_t)
+systemd_get_service_status(systemd_logind_t)
 
 type systemd_logind_var_lib_t;
 files_type(systemd_logind_var_lib_t)
@@ -135,6 +136,7 @@ type systemd_systemctl_exec_t;
 init_system_domain(systemd_systemctl_t, systemd_systemctl_exec_t)
 init_connect_private_bus(systemd_systemctl_t)
 files_read_all_pids(systemd_systemctl_t)
+systemd_getattr_unit_dirs(systemd_systemctl_t)
 
 #
 # systemd_timedated policy
