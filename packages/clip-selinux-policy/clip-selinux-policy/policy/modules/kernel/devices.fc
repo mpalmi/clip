@@ -16,14 +16,18 @@
 /dev/audio.*		-c	gen_context(system_u:object_r:sound_device_t,s0)
 /dev/autofs.*		-c	gen_context(system_u:object_r:autofs_device_t,s0)
 /dev/beep		-c	gen_context(system_u:object_r:sound_device_t,s0)
+/dev/bsr.*      -c  gen_context(system_u:object_r:cpu_device_t,s0)
 /dev/btrfs-control	-c	gen_context(system_u:object_r:lvm_control_t,s0)
 /dev/cachefiles		-c	gen_context(system_u:object_r:cachefiles_device_t,s0)
+/dev/cdc-wdm[0-9]   -c  gen_context(system_u:object_r:modem_device_t,s0)
 /dev/controlD64		-c	gen_context(system_u:object_r:xserver_misc_device_t,s0)
 /dev/crash		-c	gen_context(system_u:object_r:crash_device_t,mls_systemhigh)
 /dev/dahdi/.*		-c	gen_context(system_u:object_r:sound_device_t,s0)
+/dev/dlm.*      -c  gen_context(system_u:object_r:dlm_control_device_t,s0)
 /dev/dmfm		-c	gen_context(system_u:object_r:sound_device_t,s0)
 /dev/dmmidi.*		-c	gen_context(system_u:object_r:sound_device_t,s0)
 /dev/dsp.*		-c	gen_context(system_u:object_r:sound_device_t,s0)
+/dev/ecryptfs       -c  gen_context(system_u:object_r:ecryptfs_device_t,mls_systemhigh)
 /dev/efirtc		-c	gen_context(system_u:object_r:clock_device_t,s0)
 /dev/elographics/e2201	-c	gen_context(system_u:object_r:mouse_device_t,s0)
 /dev/em8300.*		-c	gen_context(system_u:object_r:v4l_device_t,s0)
@@ -61,6 +65,7 @@
 /dev/loop-control	-c	gen_context(system_u:object_r:loop_control_device_t,s0)
 /dev/lp.*		-c	gen_context(system_u:object_r:printer_device_t,s0)
 /dev/mcelog		-c	gen_context(system_u:object_r:kmsg_device_t,mls_systemhigh)
+/dev/media.*    -c  gen_context(system_u:object_r:v4l_device_t,s0)
 /dev/mei		-c	gen_context(system_u:object_r:mei_device_t,s0)
 /dev/mem		-c	gen_context(system_u:object_r:memory_device_t,mls_systemhigh)
 /dev/mergemem		-c	gen_context(system_u:object_r:memory_device_t,mls_systemhigh)
@@ -77,6 +82,7 @@
 /dev/net/vhost		-c	gen_context(system_u:object_r:vhost_device_t,s0)
 /dev/network_latency	-c	gen_context(system_u:object_r:netcontrol_device_t,s0)
 /dev/network_throughput	-c	gen_context(system_u:object_r:netcontrol_device_t,s0)
+/dev/nfast(/.*)?                    gen_context(system_u:object_r:pki_common_dev_t, s0)                                                                                                                                                                                         
 /dev/noz.* 		-c	gen_context(system_u:object_r:modem_device_t,s0)
 /dev/null		-c	gen_context(system_u:object_r:null_device_t,s0)
 /dev/nvidia.*		-c	gen_context(system_u:object_r:xserver_misc_device_t,s0)
@@ -90,6 +96,7 @@
 /dev/pmu		-c	gen_context(system_u:object_r:power_device_t,s0)
 /dev/port		-c	gen_context(system_u:object_r:memory_device_t,mls_systemhigh)
 /dev/pps.*		-c	gen_context(system_u:object_r:clock_device_t,s0)
+/dev/ptp.*      -c  gen_context(system_u:object_r:clock_device_t,s0)
 /dev/(misc/)?psaux	-c	gen_context(system_u:object_r:mouse_device_t,s0)
 /dev/rmidi.*		-c	gen_context(system_u:object_r:sound_device_t,s0)
 /dev/radeon		-c	gen_context(system_u:object_r:dri_device_t,s0)
@@ -106,8 +113,10 @@
 /dev/snapshot		-c	gen_context(system_u:object_r:apm_bios_t,s0)
 /dev/sndstat		-c	gen_context(system_u:object_r:sound_device_t,s0)
 /dev/sonypi		-c	gen_context(system_u:object_r:v4l_device_t,s0)
+/dev/spidev.*       -c  gen_context(system_u:object_r:usb_device_t,s0)
 /dev/tlk[0-3]		-c	gen_context(system_u:object_r:v4l_device_t,s0)
 /dev/tpm[0-9]*		-c	gen_context(system_u:object_r:tpm_device_t,s0)
+/dev/uhid		-c	gen_context(system_u:object_r:uhid_device_t,s0)
 /dev/uinput		-c	gen_context(system_u:object_r:event_device_t,s0)
 /dev/uio[0-9]+		-c	gen_context(system_u:object_r:userio_device_t,s0)
 /dev/urandom		-c	gen_context(system_u:object_r:urandom_device_t,s0)
@@ -121,6 +130,8 @@ ifdef(`distro_suse', `
 /dev/vhost-net		-c	gen_context(system_u:object_r:vhost_device_t,s0)
 /dev/vbi.*		-c	gen_context(system_u:object_r:v4l_device_t,s0)
 /dev/vbox.*		-c	gen_context(system_u:object_r:xserver_misc_device_t,s0)
+/dev/vc-mem     -c  gen_context(system_u:object_r:memory_device_t,mls_systemhigh)
+/dev/vchiq      -c  gen_context(system_u:object_r:v4l_device_t,s0)
 /dev/vga_arbiter	-c	gen_context(system_u:object_r:xserver_misc_device_t,s0)
 /dev/vmmon		-c	gen_context(system_u:object_r:vmware_device_t,s0)
 /dev/vmnet.*		-c	gen_context(system_u:object_r:vmware_device_t,s0)
@@ -163,6 +174,7 @@ ifdef(`distro_suse', `
 
 /dev/mqueue(/.*)?		<<none>>
 
+/dev/ati/card.*     -c  gen_context(system_u:object_r:xserver_misc_device_t,s0)
 /dev/mvideo/.*		-c	gen_context(system_u:object_r:xserver_misc_device_t,s0)
 
 /dev/pts(/.*)?			<<none>>
@@ -208,3 +220,17 @@ ifdef(`distro_redhat',`
 /var/named/chroot/dev/random -c	gen_context(system_u:object_r:random_device_t,s0)
 /var/named/chroot/dev/zero -c	gen_context(system_u:object_r:zero_device_t,s0)
 ')
+
+/dev/\.mount(/.*)?          gen_context(system_u:object_r:mount_var_run_t,s0)
+
+/dev/\.systemd/readahead(/.*)?  gen_context(system_u:object_r:readahead_var_run_t,s0)
+
+/dev/sclp[0-9]*     -c  gen_context(system_u:object_r:vfio_device_t,s0)
+/dev/vfio/(vfio)?[0-9]* -c  gen_context(system_u:object_r:vfio_device_t,s0)
+/dev/vmcp[0-9]*     -c  gen_context(system_u:object_r:vfio_device_t,s0)
+
+/dev/sclp_line[0-9]+    -c  gen_context(system_u:object_r:tty_device_t,s0)
+/dev/ttyUSB[0-9]+   -c  gen_context(system_u:object_r:usbtty_device_t,s0)
+
+/dev/shm/mono.*     gen_context(system_u:object_r:user_tmpfs_t,s0)
+/dev/shm/pulse-shm.*    gen_context(system_u:object_r:user_tmpfs_t,s0)

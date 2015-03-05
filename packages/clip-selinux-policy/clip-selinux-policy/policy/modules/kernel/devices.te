@@ -309,6 +309,30 @@ type zero_device_t;
 dev_node(zero_device_t)
 mls_trusted_object(zero_device_t)
 
+#
+# Type for UHID devices
+#
+type uhid_device_t;
+dev_node(uhid_device_t)
+
+#
+# Type for eCryptfs devices
+#
+type ecryptfs_device_t;
+dev_node(ecryptfs_device_t)
+
+#
+# Type for PKI Common devices
+#
+type pki_common_dev_t;
+dev_node(pki_common_dev_t)
+
+#
+# Type for Virtual Function IO devices
+#
+type vfio_device_t;
+dev_node(vfio_device_t)
+
 ########################################
 #
 # Rules for all device nodes

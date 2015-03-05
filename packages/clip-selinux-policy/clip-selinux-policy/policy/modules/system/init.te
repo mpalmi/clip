@@ -231,13 +231,15 @@ ifdef(`init_systemd',`
     files_relabel_all_pids(init_t)
     dev_relabel_all_dev_nodes(init_t)
     dev_relabel_all_sysfs(init_t)
+	dev_relabelfrom_all_generic_dev_files(init_t)
+
 	dev_read_urand(init_t)
 	dev_write_kmsg(init_t)
     relabelfrom_sock_files_pattern(init_t, tmpfs_t, tmpfs_t)
     relabel_sock_files_pattern(init_t, pidfile, pidfile)
 	
-	systemd_manage_unit_dirs(init_t)
-	systemd_manage_all_unit_files(init_t)
+	systemd_unit_dirs_manage(init_t)
+	systemd_unit_files_manage(init_t)
 	
 
 	systemd_logind_dbus_chat(init_t)
@@ -252,8 +254,8 @@ ifdef(`init_systemd',`
 	')
 
 	manage_sock_files_pattern(init_t, syslogd_var_run_t, syslogd_var_run_t)
-    systemd_manage_unit_dirs(init_t)
-    systemd_manage_all_unit_files(init_t)
+    systemd_unit_dirs_manage(init_t)
+    systemd_unit_files_manage(init_t)
 
 	optional_policy(`
 		dbus_system_bus_client(init_t)

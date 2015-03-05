@@ -1,46 +1,6 @@
 ## <summary>Systemd components (not PID 1)</summary>
 
 
-#######################################
-## <summary>
-##      Send messages to systemd_logind over dbus.
-## </summary>
-## <param name="domain">
-##      <summary>
-##      Domain allowed access.
-##      </summary>
-## </param>
-#
-interface(`systemd_logind_dbus_send',`
-	gen_require(`
-		type systemd_logind_t;
-		class dbus send_msg;
-	')
-
-	allow $1 systemd_logind_t:dbus send_msg;
-')
-
-#######################################
-## <summary>
-##      Make the specified domain trusted
-##      to inherit and use systemd_logind
-##	file descriptors.
-## </summary>
-## <param name="domain">
-##      <summary>
-##      Domain allowed access.
-##      </summary>
-## </param>
-## <rolecap/>
-#
-interface(`systemd_logind_fd_use',`
-	gen_require(`
-		type systemd_logind_t;
-	')
-	
-	allow $1 systemd_logind_t:fd use;	
-')
-
 ########################################
 ## <summary>
 ##      Make the specified type usable for
@@ -71,7 +31,7 @@ interface(`systemd_unit_file',`
 ##      </summary>
 ## </param>
 #
-interface(`systemd_search_unit_dirs',`
+interface(`systemd_unit_dirs_search',`
         gen_require(`
                 attribute systemdunitfile;
         ')
@@ -90,7 +50,7 @@ interface(`systemd_search_unit_dirs',`
 ##      </summary>
 ## </param>
 #
-interface(`systemd_list_unit_dirs',`
+interface(`systemd_unit_dirs_list',`
         gen_require(`
                 attribute systemdunitfile;
         ')
@@ -109,7 +69,7 @@ interface(`systemd_list_unit_dirs',`
 ##      </summary>
 ## </param>
 #
-interface(`systemd_create_unit_dirs',`
+interface(`systemd_unit_dirs_create',`
         gen_require(`
                 attribute systemdunitfile;
         ')
@@ -117,6 +77,79 @@ interface(`systemd_create_unit_dirs',`
 	files_search_var_lib($1)
 	allow $1 systemdunitfile:dir create;
 ')
+
+########################################
+## <summary>
+##	manage systemd unit dirs
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`systemd_unit_dirs_manage',`
+	gen_require(`
+		attribute systemdunitfile;
+	')
+
+	manage_dirs_pattern($1, systemdunitfile, systemdunitfile)
+')
+
+########################################
+## <summary>
+##	manage systemd unit link files
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`systemd_unit_symlinks_manage',`
+	gen_require(`
+		attribute systemdunitfile;
+	')
+
+	manage_lnk_files_pattern($1, systemdunitfile, systemdunitfile)
+')
+
+########################################
+## <summary>
+##	manage all systemd unit files
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`systemd_unit_files_manage',`
+	gen_require(`
+		attribute systemdunitfile;
+	')
+
+	manage_files_pattern($1, systemdunitfile, systemdunitfile)
+')
+
+########################################
+## <summary>
+##	manage all systemd unit lnk_files
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`systemd_unit_lnk_files_manage',`
+	gen_require(`
+		attribute systemdunitfile;
+	')
+
+	manage_lnk_files_pattern($1, systemdunitfile, systemdunitfile)
+')
+
 
 #####################################
 ## <summary>
@@ -128,7 +161,7 @@ interface(`systemd_create_unit_dirs',`
 ##      </summary>
 ## </param>
 #
-interface(`systemd_getattr_unit_files',`
+interface(`systemd_unit_files_getattr',`
         gen_require(`
                 attribute systemdunitfile;
         ')
@@ -147,7 +180,7 @@ interface(`systemd_getattr_unit_files',`
 ##      </summary>
 ## </param>
 #
-interface(`systemd_getattr_unit_dirs',`
+interface(`systemd_unit_dirs_getattr',`
         gen_require(`
                 attribute systemdunitfile;
         ')
@@ -165,7 +198,7 @@ interface(`systemd_getattr_unit_dirs',`
 ##      </summary>
 ## </param>
 #
-interface(`systemd_read_unit_files',`
+interface(`systemd_unit_files_read',`
         gen_require(`
                 attribute systemdunitfile;
         ')
@@ -184,7 +217,7 @@ interface(`systemd_read_unit_files',`
 ##      </summary>
 ## </param>
 #
-interface(`systemd_dontaudit_read_unit_files',`
+interface(`systemd_dontaudit_unit_files_read',`
         gen_require(`
                 attribute systemdunitfile;
         ')
@@ -202,7 +235,7 @@ interface(`systemd_dontaudit_read_unit_files',`
 ##	</summary>
 ## </param>
 #
-interface(`systemd_logind_read_pid_files',`
+interface(`systemd_logind_pid_files_read',`
 	gen_require(`
 		type systemd_logind_var_run_t;
 	')
@@ -221,7 +254,7 @@ interface(`systemd_logind_read_pid_files',`
 ##	</summary>
 ## </param>
 #
-interface(`systemd_logind_manage_pid_files',`
+interface(`systemd_logind_pid_files_manage',`
 	gen_require(`
 		type systemd_logind_var_run_t;
 	')
@@ -240,7 +273,7 @@ interface(`systemd_logind_manage_pid_files',`
 ##	</summary>
 ## </param>
 #
-interface(`systemd_logind_manage_pid_dirs',`
+interface(`systemd_logind_pid_dirs_manage',`
 	gen_require(`
 		type systemd_logind_var_run_t;
 	')
@@ -259,7 +292,7 @@ interface(`systemd_logind_manage_pid_dirs',`
 ##	</summary>
 ## </param>
 #
-interface(`systemd_logind_list_pid_dirs',`
+interface(`systemd_logind_pid_dirs_list',`
 	gen_require(`
 		type systemd_logind_var_run_t;
 	')
@@ -280,7 +313,7 @@ interface(`systemd_logind_list_pid_dirs',`
 ##	</summary>
 ## </param>
 #
-interface(`systemd_use_fds_logind',`
+interface(`systemd_logind_fd_use',`
 	gen_require(`
 		type systemd_logind_t;
 	')
@@ -309,131 +342,23 @@ interface(`systemd_logind_dbus_chat',`
 	allow systemd_logind_t $1:dbus send_msg;
 ')
 
-########################################
-## <summary>
-##	Relabel to user home directories.
-## </summary>
-## <param name="domain">
-##	<summary>
-##	Domain allowed access.
-##	</summary>
-## </param>
-#
-interface(`systemd_relabelto_fifo_file_passwd_run',`
-	gen_require(`
-	        type systemd_passwd_var_run_t;
-	')
-
-	allow $1 systemd_passwd_var_run_t:fifo_file relabelto;
-')
-
 #######################################
 ## <summary>
-##      Relabel systemd unit directories
+##      Send messages to systemd_logind over dbus.
 ## </summary>
-## <param name="script_file">
+## <param name="domain">
 ##      <summary>
-##  	Domain allowed access.
+##      Domain allowed access.
 ##      </summary>
 ## </param>
 #
-interface(`systemd_relabel_unit_dirs',`
-        gen_require(`
-                attribute systemdunitfile;
-        ')
-
-	relabel_dirs_pattern($1, systemdunitfile, systemdunitfile)
-')
-
-#######################################
-## <summary>
-##      Relabel systemd unit files
-## </summary>
-## <param name="script_file">
-##      <summary>
-##  	Domain allowed access.
-##      </summary>
-## </param>
-#
-interface(`systemd_relabel_unit_files',`
-        gen_require(`
-                attribute systemdunitfile;
-        ')
-
-	relabel_files_pattern($1, systemdunitfile, systemdunitfile)
-')
-
-########################################
-## <summary>
-##	manage systemd unit dirs
-## </summary>
-## <param name="domain">
-##	<summary>
-##	Domain allowed access.
-##	</summary>
-## </param>
-#
-interface(`systemd_manage_unit_dirs',`
+interface(`systemd_logind_dbus_send',`
 	gen_require(`
-		attribute systemdunitfile;
+		type systemd_logind_t;
+		class dbus send_msg;
 	')
 
-	manage_dirs_pattern($1, systemdunitfile, systemdunitfile)
-')
-
-########################################
-## <summary>
-##	manage systemd unit link files
-## </summary>
-## <param name="domain">
-##	<summary>
-##	Domain allowed access.
-##	</summary>
-## </param>
-#
-interface(`systemd_manage_unit_symlinks',`
-	gen_require(`
-		attribute systemdunitfile;
-	')
-
-	manage_lnk_files_pattern($1, systemdunitfile, systemdunitfile)
-')
-
-########################################
-## <summary>
-##	manage all systemd unit files
-## </summary>
-## <param name="domain">
-##	<summary>
-##	Domain allowed access.
-##	</summary>
-## </param>
-#
-interface(`systemd_manage_all_unit_files',`
-	gen_require(`
-		attribute systemdunitfile;
-	')
-
-	manage_files_pattern($1, systemdunitfile, systemdunitfile)
-	manage_lnk_files_pattern($1, systemdunitfile, systemdunitfile)
-')
-
-########################################
-## <summary>
-##	manage all systemd unit lnk_files
-## </summary>
-## <param name="domain">
-##	<summary>
-##	Domain allowed access.
-##	</summary>
-## </param>
-#
-interface(`systemd_manage_all_unit_lnk_files',`
-	gen_require(`
-		attribute systemdunitfile;
-	')
-
-	manage_lnk_files_pattern($1, systemdunitfile, systemdunitfile)
+	allow $1 systemd_logind_t:dbus send_msg;
 ')
 
 ########################################
@@ -446,7 +371,7 @@ interface(`systemd_manage_all_unit_lnk_files',`
 ##	</summary>
 ## </param>
 #
-interface(`systemd_start_all_services',`
+interface(`systemd_services_start',`
 	gen_require(`
 		attribute systemdunitfile;
 	')
@@ -464,7 +389,7 @@ interface(`systemd_start_all_services',`
 ##	</summary>
 ## </param>
 #
-interface(`systemd_get_service_status',`
+interface(`systemd_services_status',`
 	gen_require(`
 		attribute systemdunitfile;
 	')
@@ -482,7 +407,7 @@ interface(`systemd_get_service_status',`
 ##  </summary>
 ## </param>
 #
-interface(`systemd_reload_all_services',`
+interface(`systemd_services_reload',`
     gen_require(`
         attribute systemdunitfile;
     ')
@@ -508,24 +433,6 @@ interface(`systemd_config_all_services',`
 
 	allow $1 systemdunitfile:service all_service_perms;
 	init_config_all_script_files($1)
-')
-
-########################################
-## <summary>
-##	Allow the specified domain to start systemd services.
-## </summary>
-## <param name="domain">
-##	<summary>
-##	Domain allowed access.
-##	</summary>
-## </param>
-#
-interface(`systemd_start_systemd_services',`
-	gen_require(`
-		type systemd_unit_file_t;
-	')
-
-	allow $1 systemd_unit_file_t:service start;
 ')
 
 ########################################
@@ -761,42 +668,6 @@ interface(`systemd_logind_signull',`
 	')
 
 	allow $1 systemd_logind_t:process signull;
-')
-
-#######################################
-## <summary>
-##  Start power unit files domain.
-## </summary>
-## <param name="domain">
-##  <summary>
-##  Domain allowed to transition.
-##  </summary>
-## </param>
-#
-interface(`systemd_start_all_unit_files',`
-    gen_require(`
-        attribute systemdunitfile;
-    ')
-
-    allow $1 systemdunitfile:service start;
-')
-
-#######################################
-## <summary>
-##  Start power unit files domain.
-## </summary>
-## <param name="domain">
-##  <summary>
-##  Domain allowed to transition.
-##  </summary>
-## </param>
-#
-interface(`systemd_status_all_unit_files',`
-    gen_require(`
-        attribute systemdunitfile;
-    ')
-
-    allow $1 systemdunitfile:service status;
 ')
 
 ########################################
