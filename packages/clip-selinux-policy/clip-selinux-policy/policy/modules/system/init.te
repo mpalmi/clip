@@ -220,27 +220,41 @@ ifdef(`init_systemd',`
 	fs_rw_cgroup_files(init_t)
 
 	# mount-setup
-    fs_unmount_autofs(init_t)
+	fs_unmount_autofs(init_t)
 	allow init_t pstore_t:dir getattr;
 
 	selinux_compute_create_context(init_t)
 	selinux_compute_access_vector(init_t)
 	seutil_read_file_contexts(init_t)
 
-    files_search_pids(init_t)
-    files_relabel_all_pids(init_t)
-    dev_relabel_all_dev_nodes(init_t)
-    dev_relabel_all_sysfs(init_t)
+	files_list_usr(init_t)
+	files_list_var(init_t)
+	files_list_var_lib(init_t)
+	files_relabel_all_lock_dirs(init_t)
+
+	files_search_pids(init_t)
+	files_relabel_all_pids(init_t)
+	dev_relabel_all_dev_nodes(init_t)
+	dev_relabel_all_sysfs(init_t)
 	dev_relabelfrom_all_generic_dev_files(init_t)
 
 	dev_read_urand(init_t)
 	dev_write_kmsg(init_t)
-    relabelfrom_sock_files_pattern(init_t, tmpfs_t, tmpfs_t)
-    relabel_sock_files_pattern(init_t, pidfile, pidfile)
-	
+	relabelfrom_sock_files_pattern(init_t, tmpfs_t, tmpfs_t)
+	relabel_sock_files_pattern(init_t, pidfile, pidfile)
+
 	systemd_unit_dirs_manage(init_t)
 	systemd_unit_files_manage(init_t)
-	
+	systemd_unit_dirs_relabelto(init_t)
+	systemd_unit_symlinks_manage(init_t)
+
+	# systemd_socket_activated policy
+	mls_socket_write_all_levels(init_t)
+	allow init_t systemd_socket_activated_subject_type:unix_dgram_socket create_socket_perms;
+	allow init_t systemd_socket_activated_subject_type:unix_stream_socket create_stream_socket_perms;
+	allow init_t systemd_socket_activated_object_type:dir manage_dir_perms;
+	allow init_t systemd_socket_activated_object_type:fifo_file manage_fifo_file_perms;
+	allow init_t systemd_socket_activated_object_type:sock_file manage_sock_file_perms;
 
 	systemd_logind_dbus_chat(init_t)
 
@@ -254,8 +268,8 @@ ifdef(`init_systemd',`
 	')
 
 	manage_sock_files_pattern(init_t, syslogd_var_run_t, syslogd_var_run_t)
-    systemd_unit_dirs_manage(init_t)
-    systemd_unit_files_manage(init_t)
+	systemd_unit_dirs_manage(init_t)
+	systemd_unit_files_manage(init_t)
 
 	optional_policy(`
 		dbus_system_bus_client(init_t)
@@ -284,7 +298,6 @@ ifdef(`distro_debian',`
 
 ifdef(`distro_gentoo',`
 	allow init_t self:process { getcap setcap };
-
 	init_exec_rc(initrc_t)
 ')
 
@@ -763,7 +776,7 @@ optional_policy(`
 
 	cups_read_log(initrc_t)
 	cups_read_rw_config(initrc_t)
-#cups init script clears error log
+	#cups init script clears error log
 	cups_write_log(initrc_t)
 ')
 

@@ -79,7 +79,7 @@ type syslogd_var_run_t;
 files_pid_file(syslogd_var_run_t)
 
 ifdef(`init_systemd',`
-    init_daemon_pid_file(syslogd_var_run_t, dir, "syslogd")
+	init_daemon_pid_file(syslogd_var_run_t, dir, "syslogd")
 ')
 
 type var_log_t;
@@ -254,7 +254,7 @@ miscfiles_read_localization(audisp_t)
 sysnet_dns_name_resolve(audisp_t)
 
 optional_policy(`
-	dbus_system_bus_client(audisp_t)
+ dbus_system_bus_client(audisp_t)
 ')
 
 ########################################
@@ -450,6 +450,9 @@ dev_rw_kmsg(syslogd_t)
 domain_use_interactive_fds(syslogd_t)
 # Allow access to /proc/ information for journald
 domain_read_all_domains_state(syslogd_t)
+
+# Allow journald to create an active socket connection
+systemd_socket_activated(syslogd_t, syslogd_var_run_t)
 
 files_read_etc_files(syslogd_t)
 files_read_usr_files(syslogd_t)
