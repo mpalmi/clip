@@ -200,6 +200,7 @@ SELINUX=%{enforcing_mode}
 #     clip - Targeted processes are protected,
 #     mls - Multi Level Security protection.
 SELINUXTYPE=clip 
+AUTORELABEL=1
 
 " > /etc/selinux/config
 
@@ -253,7 +254,7 @@ else
    %relabel clip
 fi
 
-touch /.autorelabel
+echo "-F" > /.autorelabel
 exit 0
 
 %files clip

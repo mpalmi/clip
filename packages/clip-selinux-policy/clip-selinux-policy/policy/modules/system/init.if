@@ -2038,3 +2038,21 @@ interface(`init_connect_private_bus',`
    init_stream_connect($1)
 ')
 
+########################################
+## <summary>
+## Allow specified domain to get init status
+## </summary>
+## <param name="domain">
+## <summary>
+## Domain to not audit.
+## </summary>
+## </param>
+#
+interface(`init_service_status',`
+    gen_require(`
+        type init_t;
+    ')
+
+    allow $1 init_t:service status;
+')
+

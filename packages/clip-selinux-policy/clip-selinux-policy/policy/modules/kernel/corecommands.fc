@@ -151,7 +151,7 @@ ifdef(`distro_gentoo',`
 #
 # /sbin
 #
-/sbin				-l	gen_context(system_u:object_r:bin_t,s0)
+/sbin					gen_context(system_u:object_r:bin_t,s0)
 /sbin/.*				gen_context(system_u:object_r:bin_t,s0)
 /sbin/insmod_ksymoops_clean	--	gen_context(system_u:object_r:bin_t,s0)
 /sbin/mkfs\.cramfs		--	gen_context(system_u:object_r:bin_t,s0)

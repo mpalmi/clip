@@ -256,6 +256,8 @@ ifdef(`init_systemd',`
 	allow init_t systemd_socket_activated_object_type:fifo_file manage_fifo_file_perms;
 	allow init_t systemd_socket_activated_object_type:sock_file manage_sock_file_perms;
 
+	files_read_all_locks(init_t)
+
 	systemd_logind_dbus_chat(init_t)
 
 	logging_send_audit_msgs(init_t)

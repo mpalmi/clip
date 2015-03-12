@@ -319,6 +319,24 @@ interface(`systemd_logind_pid_dirs_list',`
 	list_dirs_pattern($1, systemd_logind_var_run_t, systemd_logind_var_run_t)
 ')
 
+######################################
+## <summary>
+## Create systemd_login PID pipes.
+## </summary>
+## <param name="domain">
+## <summary>
+## Domain allowed access.
+## </summary>
+## </param>
+#
+interface(`systemd_logind_pid_pipes_manage',`
+	gen_require(`
+		type systemd_logind_var_run_t;
+	')
+
+	files_search_pids($1)
+	manage_fifo_files_pattern($1, systemd_logind_var_run_t, systemd_logind_var_run_t)
+')
 
 ######################################
 ## <summary>
@@ -790,3 +808,74 @@ interface(`systemd_socket_activated',`
 	typeattribute $2 systemd_socket_activated_object_type;
 ')
 
+########################################
+## <summary>
+## Allow specified domain to get status of systemd unit files
+## </summary>
+## <param name="domain">
+## <summary>
+## Domain to not audit.
+## </summary>
+## </param>
+#
+interface(`systemd_unit_files_service_status',`
+	gen_require(`
+		attribute systemdunitfile;
+	')
+
+	allow $1 systemdunitfile:service status;
+')
+
+########################################
+## <summary>
+## Allow specified domain to start systemd unit files
+## </summary>
+## <param name="domain">
+## <summary>
+## Domain to not audit.
+## </summary>
+## </param>
+#
+interface(`systemd_unit_files_service_start',`
+	gen_require(`
+		attribute systemdunitfile;
+	')
+
+	allow $1 systemdunitfile:service start;
+')
+
+########################################
+## <summary>
+## Allow specified domain to stop systemd unit files
+## </summary>
+## <param name="domain">
+## <summary>
+## Domain to not audit.
+## </summary>
+## </param>
+#
+interface(`systemd_unit_files_service_stop',`
+	gen_require(`
+		attribute systemdunitfile;
+	')
+
+	allow $1 systemdunitfile:service stop;
+')
+
+########################################
+## <summary>
+## Allow specified domain to start power units
+## </summary>
+## <param name="domain">
+## <summary>
+## Domain to not audit.
+## </summary>
+## </param>
+#
+interface(`systemd_power_units_service_start',`
+	gen_require(`
+		type power_unit_file_t;
+	')
+
+	allow $1 power_unit_file_t:service start;
+')

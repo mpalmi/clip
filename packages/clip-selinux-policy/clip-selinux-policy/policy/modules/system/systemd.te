@@ -463,14 +463,14 @@ allow systemd_logind_t self:capability { fowner sys_tty_config chown dac_overrid
 allow systemd_logind_t self:process getcap;
 allow systemd_logind_t self:netlink_kobject_uevent_socket create_socket_perms;
 allow systemd_logind_t self:unix_dgram_socket create_socket_perms;
+allow systemd_logind_t self:fifo_file delete_fifo_file_perms;
 
+userdom_use_user_ttys(systemd_logind_t)
 init_var_lib_filetrans(systemd_logind_t, systemd_logind_var_lib_t, dir)
+auth_manage_faillog(systemd_logind_t)
 
-#manage_dirs_pattern(systemd_logind_t, systemd_logind_var_run_t, systemd_logind_var_run_t)
-#manage_files_pattern(systemd_logind_t, systemd_logind_var_run_t, systemd_logind_var_run_t)
-#manage_fifo_files_pattern(systemd_logind_t, systemd_logind_var_run_t, systemd_logind_var_run_t)
+systemd_logind_pid_files_manage(systemd_logind_t)
 files_read_all_pids(systemd_logind_t)
-#systemd_start_all_services(systemd_logind_t)
 
 dev_rw_sysfs(systemd_logind_t)
 dev_rw_input_dev(systemd_logind_t)
@@ -491,6 +491,7 @@ storage_setattr_scsi_generic_dev(systemd_logind_t)
 term_use_unallocated_ttys(systemd_logind_t)
 
 logging_send_syslog_msg(systemd_logind_t)
+systemd_socket_activated(systemd_logind_t, systemd_logind_var_run_t)
 
 udev_read_db(systemd_logind_t)
 udev_read_pid_files(systemd_logind_t)
@@ -500,13 +501,11 @@ optional_policy(`
 	dbus_connect_system_bus(systemd_logind_t)
 ')
 
-#getty_start_units(systemd_logind_t)
-#systemd_status_all_unit_files(systemd_logind_t)
-#systemd_status_system(systemd_logind_t)
-#systemd_start_power_units(systemd_logind_t)
-#systemd_start_transient_systemd_units(systemd_logind_t)
-#systemd_stop_system_units(systemd_logind_t)
-#systemd_stop_system(systemd_logind_t)
+systemd_unit_files_service_status(systemd_logind_t)
+systemd_unit_files_service_start(systemd_logind_t)
+systemd_unit_files_service_stop(systemd_logind_t)
+systemd_power_units_service_start(systemd_logind_t)
+init_service_status(systemd_logind_t)
 
 #########################################
 #
@@ -574,6 +573,7 @@ systemd_services_status(systemd_utmp_t)
 files_read_etc_files(systemd_sysctl_t)
 kernel_rw_net_sysctls(systemd_sysctl_t)
 kernel_rw_kernel_sysctl(systemd_sysctl_t)
+systemd_unit_files_service_stop(systemd_sysctl_t)
 
 #########################################
 #
