@@ -201,10 +201,13 @@ ifdef(`init_systemd',`
 	allow init_t self:netlink_selinux_socket read;
 
 	manage_dirs_pattern(init_t, init_var_run_t, init_var_run_t)
+	manage_sock_files_pattern(init_t, syslogd_var_run_t, syslogd_var_run_t)
 
 	kernel_read_network_state(init_t)
 	kernel_read_kernel_sysctls(init_t)
 	kernel_read_vm_sysctls(init_t)
+	kernel_dgram_send(init_t)
+	kernel_stream_connect(init_t)
 
 	domain_read_all_domains_state(init_t)
 
@@ -212,8 +215,8 @@ ifdef(`init_systemd',`
 	# for privatetmp functions
 	files_manage_generic_tmp_dirs(init_t)
 	files_mounton_tmp(init_t)
-	fs_relabel_tmpfs_dirs(init_t)
-	fs_relabel_tmpfs_files(init_t)
+	#fs_relabel_tmpfs_dirs(init_t)
+	#fs_relabel_tmpfs_files(init_t)
 
 	fs_manage_cgroup_dirs(init_t)
 	relabel_dirs_pattern(init_t, cgroup_t, cgroup_t)
@@ -263,13 +266,12 @@ ifdef(`init_systemd',`
 	logging_send_audit_msgs(init_t)
 
 	# shared hwclock
-	allow init_t adjtime_t:file { read getattr open };
+	clock_read_adjtime(init_t)
 
 	optional_policy(`
 		modutils_domtrans_insmod(init_t)
 	')
 
-	manage_sock_files_pattern(init_t, syslogd_var_run_t, syslogd_var_run_t)
 	systemd_unit_dirs_manage(init_t)
 	systemd_unit_files_manage(init_t)
 
@@ -389,9 +391,6 @@ manage_files_pattern(initrc_t, initrc_var_log_t, initrc_var_log_t)
 logging_log_filetrans(initrc_t, initrc_var_log_t, dir)
 
 init_write_initctl(initrc_t)
-
-# Connect to private bus (/run/systemd/private)
-init_connect_private_bus(initrc_t)
 
 kernel_read_system_state(initrc_t)
 kernel_read_software_raid_state(initrc_t)
@@ -723,6 +722,9 @@ ifdef(`init_systemd',`
 	corecmd_shell_entry_type(initrc_t)
 	corecmd_bin_domtrans(init_t, initrc_t)
 	corecmd_shell_domtrans(init_t, initrc_t)
+
+	# Connect to private bus (/run/systemd/private)
+	init_connect_private_bus(initrc_t)
 ')
 
 optional_policy(`

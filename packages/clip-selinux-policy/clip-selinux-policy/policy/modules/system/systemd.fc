@@ -5,6 +5,8 @@
 
 /usr/bin/systemd-tmpfiles	--	gen_context(system_u:object_r:systemd_tmpfiles_exec_t,s0)
 
+/usr/lib/dracut/.*\.service		gen_context(system_u:object_r:systemd_unit_file_t,s0)
+
 /usr/lib/systemd/catalog(/.*)?		gen_context(system_u:object_r:systemd_log_t,s0)
 /usr/lib/systemd/rhel-.*	--		gen_context(system_u:object_r:bin_t,s0)
 /usr/lib/systemd/system-generators(/.*)?	gen_context(system_u:object_r:bin_t,s0)
@@ -17,6 +19,7 @@
 /usr/lib/systemd/systemd-bootchart			--	gen_context(system_u:object_r:systemd_bootchart_exec_t,s0)
 /usr/lib/systemd/systemd-cgroups-agent		--	gen_context(system_u:object_r:systemd_cgroups_exec_t,s0)
 /usr/lib/systemd/systemd-coredump	--	gen_context(system_u:object_r:systemd_coredump_exec_t,s0)
+/usr/lib/systemd/systemd-cryptsetup			--	gen_context(system_u:object_r:systemd_cryptsetup_exec_t,s0)
 /usr/lib/systemd/systemd-initctl		--	gen_context(system_u:object_r:systemd_initctl_exec_t,s0)
 /usr/lib/systemd/systemd-hostnamed			--		gen_context(system_u:object_r:systemd_hostnamed_exec_t,s0)
 /usr/lib/systemd/systemd-localed		--	gen_context(system_u:object_r:systemd_locale_exec_t,s0)

@@ -75,6 +75,13 @@ type systemd_coredump_exec_t;
 init_system_domain(systemd_coredump_t, systemd_coredump_exec_t)
 
 #
+# cryptsetup
+#
+type systemd_cryptsetup_t;
+type systemd_cryptsetup_exec_t;
+init_system_domain(systemd_cryptsetup_t, systemd_cryptsetup_exec_t)
+
+#
 # initctl
 #
 type systemd_initctl_t;
@@ -423,6 +430,7 @@ systemd_unit_file(xlock_unit_file_t)
 kernel_domtrans_to(systemd_cgroups_t, systemd_cgroups_exec_t)
 init_connect_private_bus(systemd_cgroups_t)
 logging_send_syslog_msg(systemd_cgroups_t)
+kernel_dgram_send(systemd_cgroups_t)
 
 #######################################
 #

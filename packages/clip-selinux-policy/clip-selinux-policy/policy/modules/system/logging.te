@@ -80,6 +80,7 @@ files_pid_file(syslogd_var_run_t)
 
 ifdef(`init_systemd',`
 	init_daemon_pid_file(syslogd_var_run_t, dir, "syslogd")
+	kernel_use_fds(syslogd_t)
 ')
 
 type var_log_t;
