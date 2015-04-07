@@ -246,12 +246,12 @@ Based off of reference policy refpolicy-2.20110726.tar.bz2
 %post clip
 packages=`cat /usr/share/selinux/clip/modules.lst`
 if [ $1 -eq 1 ]; then
-   %loadpolicy clip $packages
-   restorecon -R /root /var/log /var/run
+   %loadpolicy clip $packages 2>> /tmp/policy_load.log
+   restorecon -R /root /var/log /var/run 2>> /tmp/policy_load.log
 else
 #   semodule -n -s clip 2>/dev/null
-   %loadpolicy clip $packages
-   %relabel clip
+   %loadpolicy clip $packages 2>> /tmp/policy_load.log
+   %relabel clip 2>> /tmp/policy_load.log
 fi
 
 echo "-F" > /.autorelabel
