@@ -1846,7 +1846,7 @@ interface(`init_var_lib_filetrans',`
 ##	</summary>
 ## </param>
 #
-interface(`init_var_lib_manage_files',`
+interface(`init_manage_var_lib_files',`
 	gen_require(`
 		type init_var_lib_t;
 	')
