@@ -377,6 +377,7 @@ manage_fifo_files_pattern(initrc_t, initrc_state_t, initrc_state_t)
 
 allow initrc_t initrc_var_run_t:file manage_file_perms;
 files_pid_filetrans(initrc_t, initrc_var_run_t, dir_file_class_set)
+manage_dirs_pattern(initrc_t, initrc_var_run_t, initrc_var_run_t)
 manage_chr_files_pattern(initrc_t, initrc_var_run_t, initrc_var_run_t)
 manage_lnk_files_pattern(initrc_t, initrc_var_run_t, initrc_var_run_t)
 files_lock_filetrans(initrc_t, initrc_lock_t, file)
@@ -737,7 +738,7 @@ ifdef(`init_systemd',`
 	systemd_manage_unit_symlinks(initrc_t)
 	manage_dirs_pattern(initrc_t, init_var_run_t, init_var_run_t)
 	systemd_socket_activated(initrc_t, init_var_run_t)
-	init_var_lib_files_write(initrc_t)
+	init_var_lib_manage_files(initrc_t)
 	files_read_boot_files(initrc_t)
 	# Allow initrc_t to check /etc/fstab "service." It appears that
 	# systemd is conflating files and services.
@@ -749,6 +750,12 @@ ifdef(`init_systemd',`
 
 	# lvm2-activation-generator checks file labels
 	seutil_read_file_contexts(initrc_t)
+
+	init_rw_stream_sockets(initrc_t)
+
+	optional_policy(`
+		systemd_manage_random_seed(initrc_t)
+	')
 
 	optional_policy(`
 		firewalld_dbus_chat(initrc_t)
