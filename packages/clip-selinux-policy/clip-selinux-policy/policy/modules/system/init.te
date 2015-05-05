@@ -201,8 +201,6 @@ ifdef(`init_systemd',`
 	shutdown_share_state(init_t)
 	kernel_read_fs_sysctls(init_t)
 
-	filetrans_pattern(init_t, lvm_var_run_t, var_run_t, sock_file, "lvmetad.socket")
-
 	# For /var/run/shutdown.pid.
 	manage_files_pattern(init_t, init_var_run_t, init_var_run_t)
 	manage_lnk_files_pattern(init_t, init_var_run_t, init_var_run_t)
