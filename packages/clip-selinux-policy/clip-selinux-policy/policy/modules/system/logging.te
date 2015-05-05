@@ -84,6 +84,8 @@ ifdef(`init_systemd',`
 	kernel_use_fds(syslogd_t)
 	kernel_stream_read(syslogd_t)
 	kernel_dgram_getattr(syslogd_t)
+	kernel_rw_unix_dgram_sockets(syslogd_t)
+	kernel_stream_rw(syslogd_t)
 ')
 
 type var_log_t;

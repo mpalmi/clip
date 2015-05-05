@@ -312,6 +312,25 @@ interface(`kernel_stream_read',`
 
 ########################################
 ## <summary>
+##  Read/write to kernel using a unix
+##  domain stream socket.
+## </summary>
+## <param name="domain">
+##  <summary>
+##  Domain allowed access.
+##  </summary>
+## </param>
+#
+interface(`kernel_stream_rw',`
+    gen_require(`
+        type kernel_t;
+    ')
+
+    allow $1 kernel_t:unix_stream_socket { read write };
+')
+
+########################################
+## <summary>
 ##	Read and write kernel unix datagram sockets.
 ## </summary>
 ## <param name="domain">
