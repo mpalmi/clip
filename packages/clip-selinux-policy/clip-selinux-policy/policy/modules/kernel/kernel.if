@@ -302,7 +302,7 @@ interface(`kernel_stream_connect',`
 ##	</summary>
 ## </param>
 #
-interface(`kernel_stream_read',`
+interface(`kernel_read_unix_stream_sockets',`
 	gen_require(`
 		type kernel_t;
 	')
@@ -321,12 +321,12 @@ interface(`kernel_stream_read',`
 ##  </summary>
 ## </param>
 #
-interface(`kernel_stream_rw',`
+interface(`kernel_rw_unix_stream_sockets',`
     gen_require(`
         type kernel_t;
     ')
 
-    allow $1 kernel_t:unix_stream_socket { read write };
+    allow $1 kernel_t:unix_stream_socket { read write getattr };
 ')
 
 ########################################
