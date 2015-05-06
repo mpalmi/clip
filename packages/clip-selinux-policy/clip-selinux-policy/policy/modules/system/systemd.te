@@ -26,6 +26,20 @@ attribute systemd_runtime_object_type;
 attribute systemd_unconfined_subject_type;
 
 #
+# activate
+#
+type systemd_activate_t;
+type systemd_activate_exec_t;
+init_system_domain(systemd_activate_t, systemd_activate_exec_t)
+
+#
+# systemd-analyze
+#
+type systemd_analyze_t;
+type systemd_analyze_exec_t;
+init_daemon_domain(systemd_analyze_t, systemd_analyze_exec_t)
+
+#
 # backlight
 #
 type systemd_backlight_t;
@@ -40,7 +54,20 @@ type systemd_binfmt_exec_t;
 init_system_domain(systemd_binfmt_t, systemd_binfmt_exec_t)
 
 #
-# systemd-cgtop
+# cgroups
+#
+type systemd_cgroups_t;
+type systemd_cgroups_exec_t;
+domain_type(systemd_cgroups_t)
+domain_entry_file(systemd_cgroups_t, systemd_cgroups_exec_t)
+role system_r types systemd_cgroups_t;
+
+type systemd_cgroups_var_run_t;
+files_pid_file(systemd_cgroups_var_run_t)
+init_daemon_pid_file(systemd_cgroups_var_run_t, dir, "systemd_cgroups")
+
+#
+# cgtop
 #
 type systemd_cgtop_t;
 type systemd_cgtop_exec_t;
@@ -54,11 +81,41 @@ type systemd_coredump_exec_t;
 init_system_domain(systemd_coredump_t, systemd_coredump_exec_t)
 
 #
-# systemd-detect_virt
+# detect-virt
 #
 type systemd_detect_virt_t;
 type systemd_detect_virt_exec_t;
 init_daemon_domain(systemd_detect_virt_t, systemd_detect_virt_exec_t)
+
+#
+# hostnamed
+#
+type systemd_hostnamed_t;
+type systemd_hostnamed_exec_t;
+init_daemon_domain(systemd_hostnamed_t, systemd_hostnamed_exec_t)
+
+#
+# localed
+#
+type systemd_locale_t;
+type systemd_locale_exec_t;
+init_system_domain(systemd_locale_t, systemd_locale_exec_t)
+
+#
+# logind
+#
+type systemd_logind_t;
+type systemd_logind_exec_t;
+init_daemon_domain(systemd_logind_t, systemd_logind_exec_t)
+
+type systemd_logind_var_lib_t;
+files_type(systemd_logind_var_lib_t)
+
+type systemd_logind_var_run_t;
+files_pid_file(systemd_logind_var_run_t)
+init_daemon_pid_file(systemd_logind_var_run_t, dir, "systemd_logind")
+
+manage_fifo_files_pattern(systemd_logind_t, systemd_logind_var_run_t, systemd_logind_var_run_t)
 
 #
 # machined
@@ -89,67 +146,12 @@ type systemd_stdio_bridge_exec_t;
 init_system_domain(systemd_stdio_bridge_t, systemd_stdio_bridge_exec_t)
 
 #
-# vconsole_setup
-#
-type systemd_vconsole_setup_t;
-type systemd_vconsole_setup_exec_t;
-init_system_domain(systemd_vconsole_setup_t, systemd_vconsole_setup_exec_t)
-
-#
-# utmp
-#
-type systemd_utmp_t;
-type systemd_utmp_exec_t;
-init_system_domain(systemd_utmp_t, systemd_utmp_exec_t)
-
-type systemd_utmp_var_run_t;
-files_pid_file(systemd_utmp_var_run_t)
-init_daemon_pid_file(systemd_utmp_var_run_t, dir, "systemd_utmp")
-
-#
 # passwd_agent
 #
 type systemd_passwd_agent_t;
 type systemd_passwd_agent_exec_t;
 init_system_domain(systemd_passwd_agent_t, systemd_passwd_agent_exec_t)
 
-#
-# Systemd Cgroups
-#
-type systemd_cgroups_t;
-type systemd_cgroups_exec_t;
-domain_type(systemd_cgroups_t)
-domain_entry_file(systemd_cgroups_t, systemd_cgroups_exec_t)
-role system_r types systemd_cgroups_t;
-
-type systemd_cgroups_var_run_t;
-files_pid_file(systemd_cgroups_var_run_t)
-init_daemon_pid_file(systemd_cgroups_var_run_t, dir, "systemd_cgroups")
-
-#
-# Systemd locale
-#
-type systemd_locale_t;
-type systemd_locale_exec_t;
-init_system_domain(systemd_locale_t, systemd_locale_exec_t)
-
-#
-# Systemd Logind
-#
-type systemd_logind_t;
-type systemd_logind_exec_t;
-init_daemon_domain(systemd_logind_t, systemd_logind_exec_t)
-
-type systemd_logind_var_lib_t;
-files_type(systemd_logind_var_lib_t)
-
-type systemd_logind_var_run_t;
-files_pid_file(systemd_logind_var_run_t)
-init_daemon_pid_file(systemd_logind_var_run_t, dir, "systemd_logind")
-
-manage_fifo_files_pattern(systemd_logind_t, systemd_logind_var_run_t, systemd_logind_var_run_t)
-
-#
 # Systemd Sessions
 #
 type systemd_sessions_t;
@@ -161,18 +163,11 @@ files_pid_file(systemd_sessions_var_run_t)
 init_daemon_pid_file(systemd_sessions_var_run_t, dir, "systemd_sessions")
 
 #
-# Tmpfiles
+# tmpfiles
 #
 type systemd_tmpfiles_t;
 type systemd_tmpfiles_exec_t;
 init_daemon_domain(systemd_tmpfiles_t, systemd_tmpfiles_exec_t)
-
-#
-# hostnamed
-#
-type systemd_hostnamed_t;
-type systemd_hostnamed_exec_t;
-init_daemon_domain(systemd_hostnamed_t, systemd_hostnamed_exec_t)
 
 ## <desc>
 ## <p>
@@ -190,6 +185,8 @@ type systemd_unit_file_t;
 systemd_unit_file(systemd_unit_file_t)
 
 type systemd_shutdown_t;
+systemd_unit_file(systemd_shutdown_t)
+
 type systemd_log_t;
 logging_log_file(systemd_log_t)
 
@@ -439,7 +436,7 @@ logging_send_syslog_msg(systemd_sessions_t)
 #
 
 allow systemd_tmpfiles_t self:capability  { fowner chown fsetid dac_override };
-allow systemd_tmpfiles_t self:process setfscreate;
+allow systemd_tmpfiles_t self:process { setfscreate getcap };
 
 dev_relabel_all_sysfs(systemd_tmpfiles_t)
 dev_read_urand(systemd_tmpfiles_t)
@@ -466,19 +463,3 @@ tunable_policy(`systemd_tmpfiles_manage_all',`
 	files_relabel_non_security_dirs(systemd_tmpfiles_t)
 	files_relabel_non_security_files(systemd_tmpfiles_t)
 ')
-
-#########################################
-#
-# utmp local policy
-#
-
-init_connect_private_bus(systemd_utmp_t)
-
-auth_write_login_records(systemd_utmp_t)
-
-init_rw_utmp(systemd_utmp_t)
-
-logging_send_audit_msgs(systemd_utmp_t)
-logging_send_syslog_msg(systemd_utmp_t)
-systemd_services_status(systemd_utmp_t)
-

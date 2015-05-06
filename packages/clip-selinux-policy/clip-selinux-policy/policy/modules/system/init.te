@@ -293,6 +293,7 @@ ifdef(`init_systemd',`
 
 	term_relabel_pty_dir(init_t)
 
+	files_search_kernel_modules(init_t)
 	optional_policy(`
 		modutils_domtrans_insmod(init_t)
 	')
