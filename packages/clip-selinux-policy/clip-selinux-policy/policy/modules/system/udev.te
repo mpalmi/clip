@@ -91,6 +91,10 @@ kernel_dgram_send(udev_t)
 kernel_signal(udev_t)
 kernel_search_debugfs(udev_t)
 
+ifdef(`init_systemd',`
+	files_search_kernel_modules(udev_t)
+')
+
 #https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=235182
 kernel_rw_net_sysctls(udev_t)
 kernel_read_network_state(udev_t)
