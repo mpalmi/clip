@@ -197,7 +197,8 @@ ifdef(`init_systemd',`
 
 	kernel_getattr_proc(init_t)
 	files_read_all_pids(init_t)
-    
+
+	read_files_pattern(init_t, etc_t, hostname_etc_t)
 	shutdown_share_state(init_t)
 	kernel_read_fs_sysctls(init_t)
 

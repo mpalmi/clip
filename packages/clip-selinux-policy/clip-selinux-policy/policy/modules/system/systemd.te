@@ -92,6 +92,7 @@ init_daemon_domain(systemd_detect_virt_t, systemd_detect_virt_exec_t)
 #
 type systemd_hostnamed_t;
 type systemd_hostnamed_exec_t;
+type hostname_etc_t;
 init_daemon_domain(systemd_hostnamed_t, systemd_hostnamed_exec_t)
 
 #
