@@ -302,7 +302,7 @@ interface(`kernel_stream_connect',`
 ##	</summary>
 ## </param>
 #
-interface(`kernel_read_unix_stream_sockets',`
+interface(`kernel_read_stream_sockets',`
 	gen_require(`
 		type kernel_t;
 	')
@@ -321,7 +321,7 @@ interface(`kernel_read_unix_stream_sockets',`
 ##  </summary>
 ## </param>
 #
-interface(`kernel_rw_unix_stream_sockets',`
+interface(`kernel_rw_stream_sockets',`
     gen_require(`
         type kernel_t;
     ')
