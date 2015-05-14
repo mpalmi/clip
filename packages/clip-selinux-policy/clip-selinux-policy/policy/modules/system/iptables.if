@@ -174,7 +174,7 @@ interface(`iptables_manage_config',`
 ##	</summary>
 ## </param>
 #
-interface(`iptables_rw_rawip_sockets',`
+interface(`iptables_rw_raw_sockets',`
 	gen_require(`
 		type iptables_t;
 	')
