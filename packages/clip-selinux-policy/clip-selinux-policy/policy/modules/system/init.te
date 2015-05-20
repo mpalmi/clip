@@ -264,6 +264,7 @@ ifdef(`init_systemd',`
 	relabel_sock_files_pattern(init_t, pidfile, pidfile)
 	fs_getattr_tmpfs(init_t)
 	fs_read_tmpfs_files(init_t)
+	fs_read_cgroup_files(init_t)
 
 	systemd_manage_unit_dirs(init_t)
 	systemd_manage_unit_files(init_t)
