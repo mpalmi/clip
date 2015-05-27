@@ -307,7 +307,7 @@ userdom_use_user_terminals(lvm_t)
 
 ifdef(`init_systemd',`
 	systemd_socket_activated(lvm_t, lvm_var_run_t)
-	fs_manage_hugetlbfs_dirs(lvm_t)
+	fs_list_hugetlbfs(lvm_t)
 	init_rw_stream_sockets(lvm_t)
 ')
 
