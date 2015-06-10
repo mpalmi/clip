@@ -243,7 +243,7 @@ optional_policy(`
 ')
 
 optional_policy(`
-	systemd_services_status(dhcpc_t)
+	systemd_status_unit_services(dhcpc_t)
 	systemd_search_units(dhcpc_t)
 ')
 
