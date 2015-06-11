@@ -347,6 +347,8 @@ cat <<- EOF > $AIDE_SCRIPT
 	/bin/mv /sbin/aide $AIDE_DIR/aide
 	/bin/mv /etc/aide.conf $AIDE_DIR/aide.conf
 	/bin/ln -s $AIDE_DIR/aide /usr/sbin/aide
+	/sbin/restorecon -RF $AIDE_DIR
+	/sbin/restorecon -F /usr/sbin/aide
 	# run aide cron job daily
 	echo "0 1 * * * root $AIDE_DIR/aide --check --config=$AIDE_DIR/aide.conf" >> /etc/crontab
 	/bin/sed -ie '/vg00-aide/ s/defaults/ro,defaults/' /etc/fstab
@@ -358,7 +360,7 @@ EOF
 
 /bin/chmod 755 $AIDE_SCRIPT
 
-/usr/bin/cat <<- EOF > /etc/systemd/system/aide.service
+/usr/bin/cat <<- EOF > /usr/lib/systemd/system/aide.service
 	[Unit]
 	Description=AIDE one time service
 	Before=systemd-user-sessions.service

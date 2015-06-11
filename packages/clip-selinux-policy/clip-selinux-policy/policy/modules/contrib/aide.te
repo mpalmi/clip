@@ -17,12 +17,16 @@ logging_log_file(aide_log_t)
 type aide_db_t;
 files_type(aide_db_t)
 
+# aide configuration file
+type aide_conf_t;
+files_type(aide_conf_t)
+
 ## <desc>
 ## <p>
 ## Allow aide to write to the itegrity DB.
 ## </p>
 ## </desc>
-gen_tunable(aide_enable_write_db, false)
+gen_tunable(aide_enable_write_db, true)
 
 ########################################
 #
@@ -34,6 +38,11 @@ tunable_policy(`aide_enable_write_db',`
 	# database actions
 	manage_files_pattern(aide_t, aide_db_t, aide_db_t)
 ')
+
+# config file in /var/lib/aide/
+manage_files_pattern(aide_t, aide_conf_t, aide_db_t)
+
+auditallow aide_t domain:file *;
 
 allow aide_t self:capability { dac_override fowner };
 

@@ -1,7 +1,12 @@
-/usr/bin/aide	--	gen_context(system_u:object_r:aide_exec_t,mls_systemhigh)
-/usr/sbin/aide	--	gen_context(system_u:object_r:aide_exec_t,mls_systemhigh)
+/root/aide\.sh	--	gen_context(system_u:object_r:bin_t,mls_systemhigh)
 
-/var/lib/aide(/.*)?	gen_context(system_u:object_r:aide_db_t,mls_systemhigh)
+/bin/aide	--	gen_context(system_u:object_r:aide_exec_t,mls_systemhigh)
+/sbin/aide	--	gen_context(system_u:object_r:aide_exec_t,mls_systemhigh)
+/sbin/aide	-l	gen_context(system_u:object_r:aide_exec_t,mls_systemhigh)
+
+/var/lib/aide(/.*)?		gen_context(system_u:object_r:aide_db_t,mls_systemhigh)
+/var/lib/aide/aide			--	gen_context(system_u:object_r:aide_exec_t,mls_systemhigh)
+/var/lib/aide/aide\.conf	--	gen_context(system_u:object_r:aide_conf_t,mls_systemhigh)
 
 /var/log/aide(/.*)?	gen_context(system_u:object_r:aide_log_t,mls_systemhigh)
 /var/log/aide\.log.*	--	gen_context(system_u:object_r:aide_log_t,mls_systemhigh)
